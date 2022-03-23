@@ -1,0 +1,17 @@
+parameters:
+ - name: connection
+   default: ''
+
+steps:
+  - checkout: self
+  - task: AzureCLI@2
+    displayName: "Deploy Bicep template"
+    inputs:
+      azureSubscription: ${{parameters.connection}}    # service connection
+      scriptType: bash
+      scriptLocation: inlineScript
+      inlineScript: |
+        az deployment group create \
+          --resource-group $(resourceGroup) \
+          --template-file ./main.bicep \
+          --parameters $(parametersFile) \
