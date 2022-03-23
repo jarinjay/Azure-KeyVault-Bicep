@@ -43,7 +43,7 @@ stages:
       steps:
        - task: ManualValidation@0
          inputs:
-           notifyUsers: 'jarinjayaraj@outlook.com'
+           notifyUsers: '<Email ID>'
            instructions: 'validated'
          timeoutInMinutes: 5                                  # To fail the task after 5 minutes (Approval needs to the provided within 5 min)
 
