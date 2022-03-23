@@ -1,0 +1,64 @@
+trigger: none
+
+parameters: 
+
+  - name: environment
+    displayName: Select environment to deploy the Key Vault
+    type: string
+    default: DEV
+    values:
+    - DEV
+    - PRD
+
+pool:
+  vmImage: ubuntu-latest
+
+variables:
+  - group : VG1               # Variable Group creted for DEV Environment
+  - group : VG2               # Variable Group creted for PRD Environment
+
+
+stages:
+- stage: Deploy_KV_dev
+  displayName: Deploy Key Vault in Dev Environment
+  condition:  eq('${{ parameters.environment }}', 'DEV')
+  variables:
+    - group: VG1
+  jobs: 
+    - job: deploy_dev
+      displayName: 'Deploying KV with Bicep'
+      variables:
+        resourceGroup: $(resourceGroupName)
+        parametersFile: '@./parameters/parameters_kv_dev.json'
+      steps:
+        - template: ./blocks/template_kv.yml
+          parameters: 
+            connection : $(azureServiceConnection_DEV)
+
+            
+    - job: Manual_Verification
+      dependsOn: deploy_dev
+      condition: in(dependencies.deploy_dev.result, 'Succeeded')
+      pool: server
+      steps:
+       - task: ManualValidation@0
+         inputs:
+           notifyUsers: 'jarinjayaraj@outlook.com'
+           instructions: 'validated'
+         timeoutInMinutes: 5                                  # To fail the task after 5 minutes (Approval needs to the provided within 5 min)
+
+- stage: Deploy_KV_PR
+  displayName: Deploy Key Vault in PR Environment
+  condition:  eq('${{ parameters.environment }}', 'PRD')
+  variables:
+    - group: VG2
+  jobs: 
+    - job: deploy_PRD
+      displayName: 'Deploying KV with Bicep in PR'
+      variables:
+        resourceGroup: $(resourceGroupName)
+        parametersFile: '@./parameters/parameters_kv_prd.json'
+      steps:
+        - template: ./blocks/template_kv.yml
+          parameters: 
+            connection : $(azureServiceConnection_PRD)
