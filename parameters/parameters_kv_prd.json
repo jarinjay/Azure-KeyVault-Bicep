@@ -4,6 +4,23 @@
 	"parameters": {
 		"environment": {
 			"value": "prd"
+		},
+        	"virtualNetworkRulesid": {
+			"value": "<VNET RESOURCE ID>/subnets/<SUBNET NAME>"
+		},
+		"accessPoliciesObject": {
+			"value": {
+				"accessPolicies": [
+					{"objectId": "{objectId1}"},
+					{"objectId": "{objectId2}"}
+				]
+			}
+		},
+		"ipRulesList":{
+			"value": [
+			    "IP ADDRESS",
+			    "IP ADDRESS RANGE"
+			]
 		}
-	}
+    } 
 }
