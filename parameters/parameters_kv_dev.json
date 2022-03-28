@@ -5,7 +5,7 @@
 		"environment": {
 			"value": "dev"
 		},
-        "virtualNetworkRulesid": {
+        	"virtualNetworkRulesid": {
 			"value": "<VNET RESOURCE ID>/subnets/<SUBNET NAME>"
 		},
 		"accessPoliciesObject": {
@@ -15,6 +15,12 @@
 					{"objectId": "{objectId2}"}
 				]
 			}
+		},
+		"ipRulesList":{
+			"value": [
+			    "IP ADDRESS",
+			    "IP ADDRESS RANGE"
+			]
 		}
     } 
 }
